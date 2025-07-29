@@ -4,7 +4,7 @@ This document outlines steps to build an application using Python and [Reflex](h
 
 ## 1. Project Setup
 - Initialize a new Python project and install Reflex.
-- Configure a simple SQLite database for storing completed forms.
+- Configure SQLite only for the `completed_forms` table used to store submitted forms.
 - Create folder structure:
   - `forms/` for JSON templates.
   - `database/` for the SQLite file.
@@ -18,12 +18,12 @@ This document outlines steps to build an application using Python and [Reflex](h
 - Export possible selections and data types so the Python app can build the form dynamically.
 
 ## 3. Form Template Loader
-- Implement a Python utility to read template JSON files from `forms/` when the app starts or when templates change.
+- Implement a Python utility to read template JSON files directly from `forms/` when the app starts or when templates change (without inserting them into a database).
 - Ensure each template JSON file includes a unique identifier and description.
 
 ## 4. Reflex Application
 1. Build a home page showing a list of completed forms with a brief summary (e.g., template name and timestamp).
-2. Add an “Add Form” button that opens a page with a dropdown listing available templates from the `forms/` directory.
+2. Add an "Add Form" button that opens a page with a dropdown listing available templates from the file system (`forms/` directory).
 3. When a template is selected, generate the form dynamically based on the template JSON:
    - Text fields for free input.
    - Dropdowns for predefined choices.
@@ -32,7 +32,7 @@ This document outlines steps to build an application using Python and [Reflex](h
 5. Provide a page to view or download previously completed forms.
 
 ## 5. Database Schema
-- `completed_forms` table: `id`, `template_name`, `timestamp`, `form_json`.
+- `completed_forms` table: `id`, `template_name`, `timestamp`, `form_json`. Templates are stored as JSON files, so no `templates` table is required.
 
 ## 6. Retrieval and Display
 - Implement endpoints in Reflex to fetch completed form data for display or editing.
