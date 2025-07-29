@@ -1,10 +1,10 @@
 # Development Tasks for Dynamic Reflex Form App
 
-This document outlines steps to build an application using Python and [Reflex](https://reflex.dev) for managing dynamic forms. The app will load form templates from JSON, display them in the UI, store completed forms in SQLite, and provide a VBA tool to convert Excel worksheets into template JSON files.
+This document outlines steps to build an application using Python and [Reflex](https://reflex.dev) for managing dynamic forms. The app will load form templates from JSON files, display them in the UI, store completed forms in SQLite, and provide a VBA tool to convert Excel worksheets into template JSON files.
 
 ## 1. Project Setup
 - Initialize a new Python project and install Reflex.
-- Configure a simple SQLite database for templates and completed forms.
+- Configure a simple SQLite database for storing completed forms.
 - Create folder structure:
   - `forms/` for JSON templates.
   - `database/` for the SQLite file.
@@ -18,12 +18,12 @@ This document outlines steps to build an application using Python and [Reflex](h
 - Export possible selections and data types so the Python app can build the form dynamically.
 
 ## 3. Form Template Loader
-- Implement a Python utility to read template JSON files from `forms/` and insert/update them in the SQLite `templates` table.
-- Ensure each template has a unique identifier and description.
+- Implement a Python utility to read template JSON files from `forms/` when the app starts or when templates change.
+- Ensure each template JSON file includes a unique identifier and description.
 
 ## 4. Reflex Application
 1. Build a home page showing a list of completed forms with a brief summary (e.g., template name and timestamp).
-2. Add an “Add Form” button that opens a page with a dropdown listing available templates from the database.
+2. Add an “Add Form” button that opens a page with a dropdown listing available templates from the `forms/` directory.
 3. When a template is selected, generate the form dynamically based on the template JSON:
    - Text fields for free input.
    - Dropdowns for predefined choices.
@@ -32,15 +32,14 @@ This document outlines steps to build an application using Python and [Reflex](h
 5. Provide a page to view or download previously completed forms.
 
 ## 5. Database Schema
-- `templates` table: `id`, `name`, `description`, `template_json`.
-- `completed_forms` table: `id`, `template_id`, `timestamp`, `form_json`.
+- `completed_forms` table: `id`, `template_name`, `timestamp`, `form_json`.
 
 ## 6. Retrieval and Display
 - Implement endpoints in Reflex to fetch completed form data for display or editing.
 - Show stored forms on the main page with options to view the details.
 
 ## 7. Testing
-- Create unit tests for the template loader, form submission logic, and database interactions.
+- Create unit tests for the template loader (which reads JSON files), form submission logic, and database interactions.
 - Manually verify the VBA export by generating a sample template and importing it into the app.
 
 ## 8. Future Enhancements
