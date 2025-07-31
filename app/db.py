@@ -51,3 +51,13 @@ def get_form(form_id: int):
             "data": json.loads(form_json),
         }
     return None
+
+def update_form(form_id: int, template_name: str, timestamp: str, data: dict):
+    """Update an existing form record."""
+    conn = get_connection()
+    with conn:
+        conn.execute(
+            "UPDATE completed_forms SET template_name=?, timestamp=?, form_json=? WHERE id=?",
+            (template_name, timestamp, json.dumps(data), form_id),
+        )
+    conn.close()
