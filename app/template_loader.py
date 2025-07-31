@@ -1,7 +1,11 @@
+"""Utility for loading form templates from JSON files."""
+
 import json
 from pathlib import Path
 
-TEMPLATE_DIR = Path('forms')
+# Locate the ``forms`` directory relative to this file so the app can be
+# executed from any working directory.
+TEMPLATE_DIR = Path(__file__).parent / "forms"
 
 
 def load_templates():
