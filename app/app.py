@@ -54,18 +54,33 @@ def form_fields():
     return rx.vstack(*controls, rx.button('Submit', on_click=FormState.submit))
 
 
+def layout(*content: rx.Component) -> rx.Component:
+    """Base layout with header and navigation buttons."""
+    header = rx.hstack(
+        rx.heading("Dynamic Form App"),
+        rx.spacer(),
+        rx.button("Home", on_click=lambda: rx.redirect("/")),
+        rx.button("Add Form", on_click=lambda: rx.redirect("/add")),
+        padding="1em",
+    )
+    body = rx.box(*content, padding="1em")
+    return rx.vstack(header, rx.divider(), body)
+
+
 def index() -> rx.Component:
     forms = list_forms()
     items = [
         rx.hstack(rx.text(f"{fid}. {name} @ {ts}")) for fid, name, ts in forms
     ]
     add_button = rx.button('Add Form', on_click=lambda: rx.redirect('/add'))
-    return rx.vstack(rx.heading('Completed Forms'), *items, add_button)
+    content = rx.vstack(rx.heading('Completed Forms'), *items, add_button)
+    return layout(content)
 
 
 def add_form() -> rx.Component:
     dropdown = rx.select(FormState.templates.keys(), on_change=FormState.select_template)
-    return rx.vstack(dropdown, form_fields())
+    content = rx.vstack(dropdown, form_fields())
+    return layout(content)
 
 app = rx.App()
 app.add_page(index, route='/')
