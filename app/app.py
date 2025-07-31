@@ -1,11 +1,12 @@
 import reflex as rx
 from datetime import datetime
+from typing import ClassVar
 
 from app.template_loader import load_templates
 from app.db import save_form, list_forms
 
 class FormState(rx.State):
-    templates = load_templates()
+    templates: ClassVar[dict] = load_templates()
     selected_template: str = ''
     form_data: dict = {}
 
@@ -50,13 +51,12 @@ def index() -> rx.Component:
 
 
 def add_form() -> rx.Component:
-    options = list(FormState.templates.keys())
-    dropdown = rx.select(options, on_change=FormState.select_template)
+    dropdown = rx.select(FormState.templates.keys(), on_change=FormState.select_template)
     return rx.vstack(dropdown, form_fields())
 
 app = rx.App()
-app.add_page(index, path='/')
-app.add_page(add_form, path='/add')
+app.add_page(index, route='/')
+app.add_page(add_form, route='/add')
 
 if __name__ == '__main__':
     app.run()
