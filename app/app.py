@@ -11,6 +11,11 @@ class FormState(rx.State):
     form_data: dict[str, str] = {}
     editing_id: int | None = None
 
+    @classmethod
+    def reload_templates(cls) -> None:
+        """Reload templates from disk."""
+        cls.templates = load_templates()
+
     def start_new_form(self, template_name: str):
         """Begin a new form based on the given template."""
         self.selected_template = template_name
@@ -89,6 +94,7 @@ def layout(*content: rx.Component) -> rx.Component:
 
 
 def index() -> rx.Component:
+    FormState.reload_templates()
     forms = list_forms()
     items = []
     for fid, name, ts in forms:
@@ -106,6 +112,7 @@ def index() -> rx.Component:
 
 def add_form() -> rx.Component:
     """Page for selecting a template and displaying its form."""
+    FormState.reload_templates()
     template_rows = []
     for name in FormState.templates.keys():
         template_rows.append(
