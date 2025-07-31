@@ -7,21 +7,29 @@ from app.db import save_form, list_forms
 
 class FormState(rx.State):
     templates: ClassVar[dict] = load_templates()
-    selected_template: str = ''
-    form_data: dict = {}
+    selected_template: str = ""
+    form_data: dict[str, str] = {}
 
-    def select_template(self, template_name: str):
+    def select_template(self, template_name: str) -> None:
+        """Choose a template and initialize blank form data."""
         self.selected_template = template_name
-        self.form_data = {field['label']: '' for field in self.templates[template_name]['fields']}
+        self.form_data = {
+            field["label"]: "" for field in self.templates[template_name]["fields"]
+        }
 
-    def submit(self):
+    def update_field(self, field_name: str, value: str) -> None:
+        """Update a single field in the form data."""
+        self.form_data[field_name] = value
+
+    def submit(self) -> None:
+        """Save the current form to the database and reset."""
         timestamp = datetime.now().isoformat()
         save_form(self.selected_template, timestamp, self.form_data)
         self.reset_state()
 
-    def reset_state(self):
+    def reset_state(self) -> None:
         """Clear the currently selected template and reload templates."""
-        self.selected_template = ''
+        self.selected_template = ""
         self.form_data = {}
         FormState.templates = load_templates()
 
@@ -31,12 +39,17 @@ def form_fields():
     if not tmpl:
         return rx.fragment()
     controls = []
-    for field in tmpl['fields']:
-        label = field['label']
-        if field['type'] == 'dropdown':
-            control = rx.select(field['choices'], on_change=FormState.form_data[label].set)
+    for field in tmpl["fields"]:
+        label = field["label"]
+        if field["type"] == "dropdown":
+            control = rx.select(
+                field["choices"],
+                on_change=lambda v, lbl=label: FormState.update_field(lbl, v),
+            )
         else:
-            control = rx.input(on_change=FormState.form_data[label].set)
+            control = rx.input(
+                on_change=lambda v, lbl=label: FormState.update_field(lbl, v)
+            )
         controls.append(rx.vstack(rx.text(label), control))
     return rx.vstack(*controls, rx.button('Submit', on_click=FormState.submit))
 
