@@ -80,8 +80,8 @@ def layout(*content: rx.Component) -> rx.Component:
     header = rx.hstack(
         rx.heading("Dynamic Form App"),
         rx.spacer(),
-        rx.button("Home", on_click=lambda: rx.redirect("/")),
-        rx.button("Add Form", on_click=lambda: rx.redirect("/add")),
+        rx.button("Home", on_click=lambda _: rx.redirect("/")),
+        rx.button("Add Form", on_click=lambda _: rx.redirect("/add")),
         padding="1em",
     )
     body = rx.box(*content, padding="1em")
@@ -96,10 +96,10 @@ def index() -> rx.Component:
             "Edit",
             # Reflex on_click handlers do not receive any arguments, so we wrap
             # the form ID using a default parameter.
-            on_click=lambda f=fid: FormState.load_form(f),
+            on_click=lambda _, f=fid: FormState.load_form(f),
         )
         items.append(rx.hstack(rx.text(f"{fid}. {name} @ {ts}"), edit_btn))
-    add_button = rx.button('Add Form', on_click=lambda: rx.redirect('/add'))
+    add_button = rx.button('Add Form', on_click=lambda _: rx.redirect('/add'))
     content = rx.vstack(rx.heading('Completed Forms'), *items, add_button)
     return layout(content)
 
@@ -115,7 +115,7 @@ def add_form() -> rx.Component:
                     "Use this",
                     # The on_click event provides no arguments; capture the name
                     # with a default parameter instead of expecting a parameter.
-                    on_click=lambda n=name: FormState.start_new_form(n),
+                    on_click=lambda _, n=name: FormState.start_new_form(n),
                 ),
             )
         )
