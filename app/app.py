@@ -92,7 +92,7 @@ def index() -> rx.Component:
     forms = list_forms()
     items = []
     for fid, name, ts in forms:
-        edit_btn = rx.button('Edit', on_click=lambda f=fid: FormState.load_form(f))
+        edit_btn = rx.button('Edit', on_click=lambda _, f=fid: FormState.load_form(f))
         items.append(rx.hstack(rx.text(f"{fid}. {name} @ {ts}"), edit_btn))
     add_button = rx.button('Add Form', on_click=lambda: rx.redirect('/add'))
     content = rx.vstack(rx.heading('Completed Forms'), *items, add_button)
@@ -108,7 +108,7 @@ def add_form() -> rx.Component:
                 rx.text(name),
                 rx.button(
                     "Use this",
-                    on_click=lambda n=name: FormState.start_new_form(n),
+                    on_click=lambda _, n=name: FormState.start_new_form(n),
                 ),
             )
         )
