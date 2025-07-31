@@ -100,11 +100,24 @@ def index() -> rx.Component:
 
 
 def add_form() -> rx.Component:
-    dropdown = rx.select(FormState.templates.keys(), on_change=FormState.start_new_form)
-    return rx.vstack(dropdown)
+    """Page for selecting a template and displaying its form."""
+    template_rows = []
+    for name in FormState.templates.keys():
+        template_rows.append(
+            rx.hstack(
+                rx.text(name),
+                rx.button(
+                    "Use this",
+                    on_click=lambda n=name: FormState.select_template(n),
+                ),
+            )
+        )
+    content = rx.vstack(*template_rows, form_fields())
+    return layout(content)
 
 def fill_form() -> rx.Component:
     return rx.vstack(form_fields())
+
 
 app = rx.App()
 app.add_page(index, route='/')
