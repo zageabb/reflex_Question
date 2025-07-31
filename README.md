@@ -9,10 +9,10 @@ This project demonstrates a simple Reflex application that loads form templates 
 - `tests/` – Unit tests.
 
 ## Running the App
-Install dependencies and run the app:
+Install dependencies and run the app using the Reflex CLI:
 ```bash
 pip install -r requirements.txt
-python app.py
+reflex run
 ```
 
 ## Excel Template Export
