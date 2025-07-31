@@ -78,8 +78,19 @@ def index() -> rx.Component:
 
 
 def add_form() -> rx.Component:
-    dropdown = rx.select(FormState.templates.keys(), on_change=FormState.select_template)
-    content = rx.vstack(dropdown, form_fields())
+    """Page for selecting a template and displaying its form."""
+    template_rows = []
+    for name in FormState.templates.keys():
+        template_rows.append(
+            rx.hstack(
+                rx.text(name),
+                rx.button(
+                    "Use this",
+                    on_click=lambda n=name: FormState.select_template(n),
+                ),
+            )
+        )
+    content = rx.vstack(*template_rows, form_fields())
     return layout(content)
 
 app = rx.App()
