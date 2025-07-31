@@ -108,7 +108,7 @@ def add_form() -> rx.Component:
                 rx.text(name),
                 rx.button(
                     "Use this",
-                    on_click=lambda n=name: FormState.select_template(n),
+                    on_click=lambda n=name: FormState.start_new_form(n),
                 ),
             )
         )
