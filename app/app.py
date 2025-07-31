@@ -118,7 +118,13 @@ def add_form() -> rx.Component:
 def fill_form() -> rx.Component:
     """Page for filling out the currently selected template."""
     content = rx.vstack(
-        rx.heading(FormState.selected_template or "Fill Form"),
+        rx.heading(
+            rx.cond(
+                FormState.selected_template != "",
+                FormState.selected_template,
+                "Fill Form",
+            )
+        ),
         form_fields(),
     )
     return layout(content)
