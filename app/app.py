@@ -100,9 +100,8 @@ def index() -> rx.Component:
     for fid, name, ts in forms:
         edit_btn = rx.button(
             "Edit",
-            # Reflex on_click handlers do not provide arguments, so capture
-            # the form ID using a default parameter.
-            on_click=lambda f=fid: FormState.load_form(f),
+            # Ignore the click event and use the captured form ID instead.
+            on_click=lambda _evt, f=fid: FormState.load_form(f),
         )
         items.append(rx.hstack(rx.text(f"{fid}. {name} @ {ts}"), edit_btn))
     add_button = rx.button('Add Form', on_click=lambda: rx.redirect('/add'))
@@ -120,9 +119,8 @@ def add_form() -> rx.Component:
                 rx.text(name),
                 rx.button(
                     "Use this",
-                    # The on_click event provides no arguments; capture the name
-                    # with a default parameter instead of expecting a parameter.
-                    on_click=lambda n=name: FormState.start_new_form(n),
+                    # Ignore the click event and use the captured template name.
+                    on_click=lambda _evt, n=name: FormState.start_new_form(n),
                 ),
             )
         )
