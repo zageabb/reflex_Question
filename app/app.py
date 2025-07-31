@@ -16,9 +16,10 @@ class FormState(rx.State):
     def submit(self):
         timestamp = datetime.now().isoformat()
         save_form(self.selected_template, timestamp, self.form_data)
-        self.reset()
+        self.reset_state()
 
-    def reset(self):
+    def reset_state(self):
+        """Clear the currently selected template and reload templates."""
         self.selected_template = ''
         self.form_data = {}
         FormState.templates = load_templates()
